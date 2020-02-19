@@ -9,6 +9,10 @@ app.use(express.json());
 
 app.post('/api/mailing', async (req, res) => {
   const { email } = req.body;
+  const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!emailRegexp.test(email)) {
+    return res.status(422).send({ error: 'Sintaxe inválida' });
+  }
   fs.appendFile('mailing.csv', `${email},\n`, err => {
     if (err) throw err;
   });
